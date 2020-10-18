@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    </head>
+
+    <body>
+        <h1 align="center">{{ context['name']|safe }}</h1>
+
+        <div id="barCharts">
+            <div id="confirmed">
+                <canvas id="ConfirmedChart" height="50"></canvas>
+            </div>
+            <div id="recovered">
+                <canvas id="RecoveredChart" height="50"></canvas>
+            </div>
+            <div id="deceased">
+                <canvas id="DeceasedChart" height="50"></canvas>
+            </div>
+        </div>
+        <div id="lineChart">
+            <canvas id="CumulativeChart" height="150"></canvas>
+        </div>
+    </body>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+    <script>
+        var ctx_confirmed = document.getElementById('ConfirmedChart').getContext('2d');
+        var chart = new Chart(ctx_confirmed, {
+            type: 'bar',
+            data: {
+                labels: {{ context['dates']|safe }},
+                datasets: [{
+                    label: 'Confirmed',
+                    borderColor: 'rgb(219, 34, 18)',
+                    borderWidth: 1.5,
+                    backgroundColor: 'rgba(219, 34, 18, 0.1)',
+                    data: {{ context['dataset']['Confirmed']|safe }}
+                }
+                ]
+            },
+            options: {
+                title: {
+                    display: true,
+                    position: 'left',
+                    text: 'Confirmed cases by date',
+                    fontSize: 22,
+                    fontColor: 'rgb(219, 34, 18)'
+                }
+            }
+        });
+
+        var ctx_recovered = document.getElementById('RecoveredChart').getContext('2d');
+        var chart = new Chart(ctx_recovered, {
+            type: 'bar',
+            data: {
+                labels: {{ context['dates']|safe }},
+                datasets: [{
+                    label: 'Recovered',
+                    borderColor: 'rgb(61, 130, 56)',
+                    borderWidth: 1.5,
+                    backgroundColor: 'rgba(61, 130, 56, 0.1)',
+                    data: {{ context['dataset']['Recovered']|safe }}
+                }
+                ]
+            },
+            options: {
+                title: {
+                    display: true,
+                    position: 'left',
+                    text: 'Recovered cases by date',
+                    fontSize: 22,
+                    fontColor: 'rgb(61, 130, 56)'
+                }
+            }
+        });
+
+        var ctx_deceased = document.getElementById('DeceasedChart').getContext('2d');
+        var chart = new Chart(ctx_deceased, {
+            type: 'bar',
+            data: {
+                labels: {{ context['dates']|safe }},
+                datasets: [{
+                    label: 'Deceased',
+                    borderColor: 'rgb(130, 117, 116)',
+                    borderWidth: 1.5,
+                    backgroundColor: 'rgba(130, 117, 116, 0.1)',
+                    data: {{ context['dataset']['Deceased']|safe }}
+                }
+                ]
+            },
+            options: {
+                title: {
+                    display: true,
+                    position: 'left',
+                    text: 'Deceased cases by date',
+                    fontSize: 22,
+                    fontColor: 'rgb(130, 117, 116)'
+                }
+            }
+        });
+
+        var ctx_cumulative = document.getElementById('CumulativeChart').getContext('2d');
+        var chart = new Chart(ctx_cumulative, {
+            type: 'line',
+            data: {
+                labels: {{ context['dates']|safe }},
+                datasets: [
+                {
+                    label: 'Deceased',
+                    borderColor: 'rgb(130, 117, 116)',
+                    borderWidth: 1.5,
+                    backgroundColor: 'rgba(130, 117, 116, 0.1)',
+                    data: {{ context['dataset']['Total Deceased']|safe }}
+                },
+                {
+                    label: 'Active',
+                    borderColor: 'rgb(219, 34, 18)',
+                    borderWidth: 1.5,
+                    backgroundColor: 'rgba(219, 34, 18, 0.1)',
+                    data: {{ context['dataset']['Total Active']|safe }}
+                },
+                {
+                    label: 'Recovered',
+                    borderColor: 'rgb(61, 130, 56)',
+                    borderWidth: 1.5,
+                    backgroundColor: 'rgba(61, 130, 56, 0.1)',
+                    data: {{ context['dataset']['Total Recovered']|safe }}
+                },
+                ]
+            },
+            options: {
+                title: {
+                    display: true,
+                    position: 'left',
+                    text: 'Total Active, Recovered and Deceased cases by date',
+                    fontSize: 22
+                }
+            }
+        });
+    </script>
+</html>
