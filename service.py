@@ -1,3 +1,4 @@
+import operator
 import requests
 
 from config import Names
@@ -76,6 +77,27 @@ class Service:
                     )
 
         return dataset, dates
+
+    def get_all_stats_last_day_all(self):
+        """
+        Returns latest data for all states for all parameters
+        :return: dict
+        """
+        dataset, dates = self.tabulate()
+        states = [k for k, v in Names.state_names.items() if k != 'tt']
+        return_dict = {}
+        for state in states:
+            active = dataset[state]['Total Active'][-1]
+            recovered = dataset[state]['Total Recovered'][-1]
+            deceased = dataset[state]['Total Deceased'][-1]
+            confirmed = active + recovered + deceased
+            return_dict[Names.state_names[state]] = {
+                'total_confirmed': confirmed,
+                'total_active': active,
+                'total_recovered': recovered,
+                'total_deceased': deceased
+            }
+        return return_dict
 
     def get_total_active_all_states(self):
         """

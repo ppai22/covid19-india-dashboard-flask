@@ -1,27 +1,74 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
-    </head>
 
-    <body>
-        <h1 align="center">{{ context['name']|safe }}</h1>
 
-        <div id="barCharts">
-            <div id="confirmed">
-                <canvas id="ConfirmedChart" height="50"></canvas>
-            </div>
-            <div id="recovered">
-                <canvas id="RecoveredChart" height="50"></canvas>
-            </div>
-            <div id="deceased">
-                <canvas id="DeceasedChart" height="50"></canvas>
-            </div>
+<title>Covid 19 India Dashboard - {{ context['name']|safe }}</title>
+
+<style>
+.center {
+    margin-left: auto;
+    margin-right: auto;
+    column-gap: 20px;
+}
+
+.center th {
+    padding: 0 10px;
+}
+
+</style>
+
+{% extends "base.html" %}
+
+{% block content %}
+
+    <h2 align="center">{{ context['name']|safe }}</h2>
+
+    <div class="details" style="width:100%">
+        <table class="center">
+            <tr>
+                <th>
+                    <h3>Total Active</h3>
+                    <h3>{{ context['dataset']['Total Active'][-1] }}</h3>
+                </th>
+                <th>
+                    <h3>Total Recovered</h3>
+                    <h3>{{ context['dataset']['Total Recovered'][-1] }}</h3>
+                </th>
+                <th>
+                    <h3>Total Deceased</h3>
+                    <h3>{{ context['dataset']['Total Deceased'][-1] }}</h3>
+                </th>
+            </tr>
+            <tr>
+                <th>
+                    <h3>Confirmed Yesterday</h3>
+                    <h3>{{ context['dataset']['Confirmed'][-1] }}</h3>
+                </th>
+                <th>
+                    <h3>Recovered Yesterday</h3>
+                    <h3>{{ context['dataset']['Recovered'][-1] }}</h3>
+                </th>
+                <th>
+                    <h3>Deceased Yesterday</h3>
+                    <h3>{{ context['dataset']['Deceased'][-1] }}</h3>
+                </th>
+            </tr>
+        </table>
+    </div>
+
+    <div id="barCharts">
+        <div id="confirmed">
+            <canvas id="ConfirmedChart" height="100"></canvas>
         </div>
-        <div id="lineChart">
-            <canvas id="CumulativeChart" height="150"></canvas>
+        <div id="recovered">
+            <canvas id="RecoveredChart" height="100"></canvas>
         </div>
-    </body>
+        <div id="deceased">
+            <canvas id="DeceasedChart" height="100"></canvas>
+        </div>
+    </div>
+    <div id="lineChart">
+        <canvas id="CumulativeChart" height="150"></canvas>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
     <script>
         var ctx_confirmed = document.getElementById('ConfirmedChart').getContext('2d');
@@ -138,4 +185,5 @@
             }
         });
     </script>
-</html>
+
+{% endblock %}

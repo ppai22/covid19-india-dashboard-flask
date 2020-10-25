@@ -22,7 +22,8 @@ def state_data(state_code):
     context = {
         'dataset': dataset,
         'dates': dates,
-        'name': name
+        'name': name,
+        'states': [v for k, v in Names.state_names.items()]
     }
     return render_template('display.html', context=context)
 
@@ -34,10 +35,26 @@ def home_page():
     :return:
     """
     dataset = Service().get_total_active_all_states()
+    all_data = Service().get_all_stats_last_day_all()
+    table_data = [[], [], [], [], []]
+    for state, state_data in all_data.items():
+        if state != "India":
+            table_data[0].append(state)
+            table_data[1].append(state_data['total_confirmed'])
+            table_data[2].append(state_data['total_active'])
+            table_data[3].append(state_data['total_recovered'])
+            table_data[4].append(state_data['total_deceased'])
+    india_data, _ = Service().load_state_data('India')
     data = []
     for state in Names.state_names.keys():
         data.append([Names.state_names[state].lower(), dataset[state]])
-    return render_template('home.html', data=data)
+    context = {
+        'data': data,
+        'states': [v for k, v in Names.state_names.items()],
+        'dataset': india_data,
+        'table_data': table_data
+    }
+    return render_template('home.html', context=context)
 
 
 if __name__ == '__main__':
