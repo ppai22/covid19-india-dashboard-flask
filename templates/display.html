@@ -58,6 +58,9 @@
         <div id="confirmed">
             <canvas id="ConfirmedChart" height="100"></canvas>
         </div>
+        <div id="seven_day_avg">
+            <canvas id="SevenDayAvgChart" height="100"></canvas>
+        </div>
         <div id="recovered">
             <canvas id="RecoveredChart" height="100"></canvas>
         </div>
@@ -92,6 +95,32 @@
                     text: 'Confirmed cases by date',
                     fontSize: 22,
                     fontColor: 'rgb(219, 34, 18)'
+                }
+            }
+        });
+
+        var ctx_seven_day_avg = document.getElementById('SevenDayAvgChart').getContext('2d');
+        var chart = new Chart(ctx_seven_day_avg, {
+            type: 'line',
+            data: {
+                labels: {{ context['dates_seven_day_avg']|safe }},
+                datasets: [{
+                    label: 'Seven Days Average New Cases',
+                    borderColor: 'rgb(255, 153, 0)',
+                    borderWidth: 1.5,
+                    backgroundColor: 'rgba(255, 153, 0, 0.2)',
+                    pointBorderWidth: 0.1,
+                    data: {{ context['seven_day_avg']|safe }}
+                }
+                ]
+            },
+            options: {
+                title: {
+                    display: true,
+                    position: 'left',
+                    text: 'Seven Days Average New Cases',
+                    fontSize: 22,
+                    fontColor: 'rgb(255, 153, 0)'
                 }
             }
         });
@@ -157,6 +186,7 @@
                     borderColor: 'rgb(130, 117, 116)',
                     borderWidth: 1.5,
                     backgroundColor: 'rgba(130, 117, 116, 0.1)',
+                    pointBorderWidth: 0.1,
                     data: {{ context['dataset']['Total Deceased']|safe }}
                 },
                 {
@@ -164,6 +194,7 @@
                     borderColor: 'rgb(219, 34, 18)',
                     borderWidth: 1.5,
                     backgroundColor: 'rgba(219, 34, 18, 0.1)',
+                    pointBorderWidth: 0.1,
                     data: {{ context['dataset']['Total Active']|safe }}
                 },
                 {
@@ -171,6 +202,7 @@
                     borderColor: 'rgb(61, 130, 56)',
                     borderWidth: 1.5,
                     backgroundColor: 'rgba(61, 130, 56, 0.1)',
+                    pointBorderWidth: 0.1,
                     data: {{ context['dataset']['Total Recovered']|safe }}
                 },
                 ]

@@ -33,6 +33,7 @@ class Service:
         """
         data = self.load_data()
         dataset = {}
+        seven_day_avg = {}
         dates = []
         for state in self.STATES:
             dataset[state] = {
@@ -76,14 +77,18 @@ class Service:
                         active
                     )
 
-        return dataset, dates
+        for state in self.STATES:
+            seven_day_avg[state] = [round(sum([int(val) for val in dataset[state]['Confirmed'][i-6:i+1]])/7)
+                                    for i in range(7, len(dataset[state]['Confirmed']))]
+
+        return dataset, dates, seven_day_avg
 
     def get_all_stats_last_day_all(self):
         """
         Returns latest data for all states for all parameters
         :return: dict
         """
-        dataset, dates = self.tabulate()
+        dataset, dates, seven_day_avg = self.tabulate()
         states = [k for k, v in Names.state_names.items() if k != 'tt']
         return_dict = {}
         for state in states:
@@ -134,8 +139,8 @@ class Service:
         """
         state = Names.get_code_from_name(name)
         if name == 'all':
-            dataset, dates = self.tabulate()
-            return dataset['tt'], dates
+            dataset, dates, seven_day_avg = self.tabulate()
+            return dataset['tt'], dates, seven_day_avg['tt']
         else:
-            dataset, dates = self.tabulate()
-            return dataset[state], dates
+            dataset, dates, seven_day_avg = self.tabulate()
+            return dataset[state], dates, seven_day_avg[state]

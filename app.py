@@ -14,7 +14,7 @@ def state_data(state_code):
     :param state_code: str name of the state
     :return:
     """
-    dataset, dates = Service().load_state_data(state_code)
+    dataset, dates, seven_day_avg = Service().load_state_data(state_code)
     if state_code != 'all':
         name = Names.state_names[Names.get_code_from_name(state_code)]
     else:
@@ -23,7 +23,9 @@ def state_data(state_code):
         'dataset': dataset,
         'dates': dates,
         'name': name,
-        'states': [v for k, v in Names.state_names.items()]
+        'states': [v for k, v in Names.state_names.items()],
+        'seven_day_avg': seven_day_avg,
+        'dates_seven_day_avg': dates[7:]
     }
     return render_template('display.html', context=context)
 
@@ -44,7 +46,7 @@ def home_page():
             table_data[2].append(state_data['total_active'])
             table_data[3].append(state_data['total_recovered'])
             table_data[4].append(state_data['total_deceased'])
-    india_data, _ = Service().load_state_data('India')
+    india_data, _, _ = Service().load_state_data('India')
     data = []
     for state in Names.state_names.keys():
         data.append([Names.state_names[state].lower(), dataset[state]])
@@ -58,4 +60,4 @@ def home_page():
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
