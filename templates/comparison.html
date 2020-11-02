@@ -1,0 +1,63 @@
+
+
+{% extends "base.html" %}
+
+{% block content %}
+
+    <h2 align="center">Comparison between states</h2>
+
+    <div id="lineChart">
+        <canvas id="comparisonActiveCases" height="150"></canvas>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+
+    <script>
+
+        function getRandomRgb() {
+            var num = Math.round(0xffffff * Math.random());
+            var r = num >> 16;
+            var g = num >> 8 & 255;
+            var b = num & 255;
+            return 'rgb(' + r + ', ' + g + ', ' + b + ')';
+        };
+
+        var states_data = {{ context['top_ten_active']|safe }};
+        var state_names = {{ context['state_names']|safe }};
+        var top_ten_state_names = {{ context['top_ten_active_states']|safe }};
+        function active_data() {
+            var return_dict = [];
+            for (var i=0; i < top_ten_state_names.length; i++) {
+                return_dict.push({
+                    label: state_names[top_ten_state_names[i]],
+                    borderColor: getRandomRgb(),
+                    borderWidth: 1.5,
+                    backgroundColor: 'rgba(0, 0, 0, 0)',
+                    pointBorderWidth: 0.1,
+                    data: states_data[top_ten_state_names[i]]
+                });
+            };
+            return return_dict;
+        };
+        console.log(active_data());
+
+        var ctx_active_cases = document.getElementById('comparisonActiveCases').getContext('2d');
+        var chart = new Chart(ctx_active_cases, {
+            type: 'line',
+            data: {
+                labels: {{ context['dates']|safe }},
+                datasets: active_data()
+            },
+            options: {
+                title: {
+                    display: true,
+                    position: 'left',
+                    text: 'Highest Active Cases',
+                    fontSize: 22
+                }
+            }
+        });
+
+    </script>
+
+{% endblock %}

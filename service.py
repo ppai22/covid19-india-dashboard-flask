@@ -104,6 +104,24 @@ class Service:
             }
         return return_dict
 
+    def get_recovery_rate(self):
+        """
+        Method to get latest recovery rate of all states
+        :return: dict
+        """
+        dataset, _, _ = self.tabulate()
+        recovery_data = {}
+        for state in Names.state_names:
+            active = dataset[state]['Total Active'][-1]
+            recovered = dataset[state]['Total Recovered'][-1]
+            deceased = dataset[state]['Total Deceased'][-1]
+            confirmed = active + recovered + deceased
+            if int(confirmed) != 0:
+                recovery_data[state] = int(recovered) / int(confirmed) * 100
+            else:
+                recovery_data[state] = 100
+        return recovery_data
+
     def get_total_active_all_states(self):
         """
         Method to fetch only the active cases to display on home page

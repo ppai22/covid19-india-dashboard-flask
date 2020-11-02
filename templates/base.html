@@ -98,8 +98,10 @@
 <div class="topnav">
     <a href="/">Home</a>
     <a href="/India/">India Data</a>
+    <a href="/comparison/">States Data</a>
+    <a href="/recovery/">Recovery Rates</a>
     <div class="dropdown">
-        <button class="dropbtn">States</button>
+        <button class="dropbtn">State Pages</button>
         <div class="dropdown-content">
             {% for state in context['states'] %}
                 <a href="/{{ state }}/">{{ state }}</a>
