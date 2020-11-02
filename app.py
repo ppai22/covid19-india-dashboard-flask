@@ -91,6 +91,10 @@ def comparison():
 
 @app.route('/recovery/')
 def recovery_rate():
+    """
+    App route to display the recovery rates
+    :return:
+    """
     recovery_data = Service().get_recovery_rate()
     data = []
     for state in Names.state_names.keys():
@@ -105,4 +109,4 @@ def recovery_rate():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()

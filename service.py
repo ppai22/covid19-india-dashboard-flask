@@ -117,7 +117,7 @@ class Service:
             deceased = dataset[state]['Total Deceased'][-1]
             confirmed = active + recovered + deceased
             if int(confirmed) != 0:
-                recovery_data[state] = int(recovered) / int(confirmed) * 100
+                recovery_data[state] = round(int(recovered) / int(confirmed) * 100, 2)
             else:
                 recovery_data[state] = 100
         return recovery_data
