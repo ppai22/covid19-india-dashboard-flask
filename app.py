@@ -1,4 +1,4 @@
-import secrets
+import os
 
 from flask import Flask, render_template, request, redirect
 from flask_wtf.csrf import CSRFProtect
@@ -9,8 +9,8 @@ from service import Service
 
 
 app = Flask(__name__, template_folder='templates')
-secret_key = secrets.token_hex(16)
-app.config['SECRET_KEY'] = secret_key
+# 'set SECRET_KEY=<secret_key>' in terminal for debug mode
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
 csrf = CSRFProtect(app)
 csrf.init_app(app)
 
