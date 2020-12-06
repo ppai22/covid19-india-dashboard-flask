@@ -1,16 +1,44 @@
-from flask import Flask, render_template
+import secrets
+
+from flask import Flask, render_template, request, redirect
+from flask_wtf.csrf import CSRFProtect
 
 from config import Names
+from forms import SelectState
 from service import Service
 
 
 app = Flask(__name__, template_folder='templates')
+secret_key = secrets.token_hex(16)
+app.config['SECRET_KEY'] = secret_key
+csrf = CSRFProtect(app)
+csrf.init_app(app)
+
+
+@app.route('/states/', methods=['GET', 'POST'])
+def state_data():
+    """
+    App route to display the state data
+    Options available via drop down menu to select state
+    :return:
+    """
+    form = SelectState()
+    if form.is_submitted():
+        response = request.form
+        state_code = Names.state_names[response['state']]
+        return redirect(f'/{state_code}')
+    else:
+        context = {
+            'form': form,
+            'states': [v for k, v in Names.state_names.items()]
+        }
+    return render_template('display.html', context=context)
 
 
 @app.route('/<state_code>/')
-def state_data(state_code):
+def details(state_code):
     """
-    App route to display the state data
+    Generic endpoint to get to a state page via state_code
     :param state_code: str name of the state
     :return:
     """
