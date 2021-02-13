@@ -69,6 +69,9 @@
         </div>
 
         <div id="barCharts">
+            <div id="recovery_rate">
+                <canvas id="RecoveryRate" height="50"></canvas>
+            </div>
             <div id="confirmed">
                 <canvas id="ConfirmedChart" height="100"></canvas>
             </div>
@@ -87,6 +90,40 @@
         </div>
 
         <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+        <script>
+            var ctx_recovery_rate = document.getElementById('RecoveryRate').getContext('2d');
+            var chart = new Chart(ctx_recovery_rate, {
+                type: 'doughnut',
+                data: {
+                        datasets: [{
+                            data: [{{ context['recovery_rate']|safe }}, 100 - {{ context['recovery_rate']|safe }}],
+                            borderColor: [
+                                'rgb(61, 130, 56)',
+                                'rgb(219, 34, 18)'
+                            ],
+                            backgroundColor: [
+                                'rgba(61, 130, 56, 0.3)',
+                                'rgba(219, 34, 18, 0.3)'
+                            ]
+                        }],
+                        labels: [
+                            'Recovered',
+                            'Active'
+                        ],
+                    },
+                options: {
+                    title: {
+                        display: true,
+                        text: 'Recovery Rate',
+                        fontSize: 22,
+                        fontColor: 'rgb(61, 130, 56)'
+                    },
+                    rotation: - Math.PI,
+                    circumference: Math.PI
+                }
+            });
+        </script>
+
         <script>
             var ctx_confirmed = document.getElementById('ConfirmedChart').getContext('2d');
             var chart = new Chart(ctx_confirmed, {

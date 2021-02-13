@@ -43,6 +43,7 @@ def details(state_code):
     :return:
     """
     dataset, dates, seven_day_avg = Service().load_state_data(state_code)
+    recovery_rate = Service().get_recovery_rate()[Names.get_code_from_name(state_code)]
     if state_code != 'all':
         name = Names.state_names[Names.get_code_from_name(state_code)]
     else:
@@ -53,7 +54,8 @@ def details(state_code):
         'name': name,
         'states': [v for k, v in Names.state_names.items()],
         'seven_day_avg': seven_day_avg,
-        'dates_seven_day_avg': dates[7:]
+        'dates_seven_day_avg': dates[7:],
+        'recovery_rate': recovery_rate
     }
     return render_template('display.html', context=context)
 
