@@ -1,4 +1,5 @@
-import operator
+import numpy
+import pandas
 import requests
 
 from config import Names
@@ -16,6 +17,9 @@ class Service:
               'ga', 'gj', 'hp', 'hr', 'jh', 'jk', 'ka', 'kl', 'la', 'ld',
               'mh', 'ml', 'mn', 'mp', 'mz', 'nl', 'or', 'pb', 'py', 'rj',
               'sk', 'tg', 'tn', 'tr', 'tt', 'un', 'up', 'ut', 'wb']
+    # Vaccination data
+    VACCINATION_URL = \
+        "https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/vaccinations/country_data/India.csv"
 
     def load_data(self):
         """
@@ -162,3 +166,14 @@ class Service:
         else:
             dataset, dates, seven_day_avg = self.tabulate()
             return dataset[state], dates, seven_day_avg[state]
+
+    def vaccination_data(self):
+        """
+        Method that fetches and serves the country level vaccination data
+        :return:
+        """
+        data = pandas.read_csv(self.VACCINATION_URL)
+        dates = numpy.array(data['date'])
+        cumulative_vaccination = numpy.array(data['total_vaccinations'])
+        daily_vaccination = numpy.diff(cumulative_vaccination)
+        return dates, cumulative_vaccination, daily_vaccination

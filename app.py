@@ -136,5 +136,21 @@ def recovery_rate():
     return render_template('recovery_rate.html', context=context)
 
 
+@app.route('/vaccination/')
+def vaccination_view():
+    """
+    App route to display India level vaccination data
+    :return:
+    """
+    dates, cumulative_data, daily_data = Service().vaccination_data()
+    context = {
+        'dates': dates.tolist(),
+        'cumulative_data': cumulative_data.tolist(),
+        'daily_data': [0] + daily_data.tolist(),
+        'states': [v for k, v in Names.state_names.items()],
+    }
+    return render_template('vaccination.html', context=context)
+
+
 if __name__ == '__main__':
     app.run()

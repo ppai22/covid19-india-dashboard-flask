@@ -1,0 +1,72 @@
+
+
+<title>Vaccination Data - India</title>
+
+{% extends "base.html" %}
+
+{% block content %}
+
+    <div id="Charts">
+        <div id="cumulativeChart">
+            <canvas id="VaccinationChart" height="100"></canvas>
+        </div>
+        <div id="dailyChart">
+            <canvas id="DailyVaccinationChart" height="100"></canvas>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+    <script>
+        var ctx_cumulative = document.getElementById('VaccinationChart').getContext('2d');
+        var chart = new Chart(ctx_cumulative, {
+            type: 'line',
+            data: {
+                labels: {{ context['dates']|safe }},
+                datasets: [{
+                    label: 'Cumulative Vaccination Data',
+                    borderColor: 'rgb(61, 130, 56)',
+                    borderWidth: 1.5,
+                    backgroundColor: 'rgba(61, 130, 56, 0.1)',
+                    data: {{ context['cumulative_data']|safe }}
+                }
+                ]
+            },
+            options: {
+                title: {
+                    display: true,
+                    position: 'left',
+                    text: 'Cumulative Vaccination Data',
+                    fontSize: 22,
+                    fontColor: 'rgb(61, 130, 56)'
+                }
+            }
+        });
+
+        var ctx_daily_chart = document.getElementById('DailyVaccinationChart').getContext('2d');
+        var chart = new Chart(ctx_daily_chart, {
+            type: 'bar',
+            data: {
+                labels: {{ context['dates']|safe }},
+                datasets: [{
+                    label: 'Daily Vaccination Data',
+                    borderColor: 'rgb(61, 130, 56)',
+                    borderWidth: 1.5,
+                    backgroundColor: 'rgba(61, 130, 56, 0.1)',
+                    data: {{ context['daily_data']|safe }}
+                }
+                ]
+            },
+            options: {
+                title: {
+                    display: true,
+                    position: 'left',
+                    text: 'Daily Vaccination Data',
+                    fontSize: 22,
+                    fontColor: 'rgb(61, 130, 56)'
+                }
+            }
+        });
+    </script>
+
+
+{% endblock %}
