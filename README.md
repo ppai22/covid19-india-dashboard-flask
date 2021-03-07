@@ -7,7 +7,8 @@ This is a work in progress and has been deployed [here](https://covid-19-india-d
 
 - India map in home page with total active cases
 - Clicking on the state names opens the state page
-- State page shows confirmed cases, recovered cases, deceased cases count along with cumulative curve
+- State page shows confirmed cases, recovered cases, deceased cases count along with cumulative curve, recovery rate
+- Vaccination data shown in the Vaccination page (at India level) (Data from [Our World in Data](https://github.com/owid/covid-19-data/blob/master/public/data/vaccinations/country_data/India.csv))
 
 ### Tools used:
 - [Flask](https://flask.palletsprojects.com/en/1.1.x/) framework
