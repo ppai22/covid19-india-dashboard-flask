@@ -176,4 +176,6 @@ class Service:
         dates = numpy.array(data['date'])
         cumulative_vaccination = numpy.array(data['total_vaccinations'])
         daily_vaccination = numpy.diff(cumulative_vaccination)
-        return dates, cumulative_vaccination, daily_vaccination
+        fully_vaccinated = numpy.array(data['people_fully_vaccinated'])
+        daily_full_vaccination = numpy.diff(fully_vaccinated)
+        return dates, cumulative_vaccination, daily_vaccination, fully_vaccinated, daily_full_vaccination

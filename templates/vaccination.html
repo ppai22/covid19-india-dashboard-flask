@@ -25,11 +25,19 @@
             type: 'line',
             data: {
                 labels: {{ context['dates']|safe }},
-                datasets: [{
-                    label: 'Cumulative Vaccination Data',
+                datasets: [
+                {
+                    label: 'Fully Vaccinated Data',
                     borderColor: 'rgb(61, 130, 56)',
                     borderWidth: 1.5,
-                    backgroundColor: 'rgba(61, 130, 56, 0.1)',
+                    backgroundColor: 'rgba(61, 130, 56, 0.7)',
+                    data: {{ context['fully_vaccinated']|safe }}
+                },
+                {
+                    label: 'Single Dose Data',
+                    borderColor: 'rgb(255, 153, 0)',
+                    borderWidth: 1.5,
+                    backgroundColor: 'rgba(255, 153, 0, 0.2)',
                     data: {{ context['cumulative_data']|safe }}
                 }
                 ]
@@ -41,6 +49,9 @@
                     text: 'Cumulative Vaccination Data',
                     fontSize: 22,
                     fontColor: 'rgb(61, 130, 56)'
+                },
+                tooltips : {
+                    mode : 'index'
                 }
             }
         });
@@ -50,11 +61,19 @@
             type: 'bar',
             data: {
                 labels: {{ context['dates']|safe }},
-                datasets: [{
-                    label: 'Daily Vaccination Data',
+                datasets: [
+                {
+                    label: 'Daily Fully Vaccinated Data',
                     borderColor: 'rgb(61, 130, 56)',
                     borderWidth: 1.5,
-                    backgroundColor: 'rgba(61, 130, 56, 0.1)',
+                    backgroundColor: 'rgba(61, 130, 56, 0.7)',
+                    data: {{ context['daily_fully_vaccinated']|safe }}
+                },
+                {
+                    label: 'Daily First Dose Data',
+                    borderColor: 'rgb(255, 153, 0)',
+                    borderWidth: 1.5,
+                    backgroundColor: 'rgba(255, 153, 0, 0.2)',
                     data: {{ context['daily_data']|safe }}
                 }
                 ]
@@ -66,6 +85,17 @@
                     text: 'Daily Vaccination Data',
                     fontSize: 22,
                     fontColor: 'rgb(61, 130, 56)'
+                },
+                scales: {
+                    xAxes: [{
+                        stacked: true
+                    }],
+                    yAxes: [{
+                        stacked: true
+                    }]
+                },
+                tooltips : {
+                    mode : 'index'
                 }
             }
         });
