@@ -51,7 +51,12 @@
                     fontColor: 'rgb(61, 130, 56)'
                 },
                 tooltips : {
-                    mode : 'index'
+                    mode : 'index',
+                    callbacks: {
+                        footer: function(tooltipItem) {
+                            return {{ context['sources']|safe }}[tooltipItem[0].index]
+                        }
+                    }
                 }
             }
         });
@@ -95,7 +100,12 @@
                     }]
                 },
                 tooltips : {
-                    mode : 'index'
+                    mode : 'index',
+                    callbacks: {
+                        footer: function(tooltipItem) {
+                            return {{ context['sources']|safe }}[tooltipItem[0].index]
+                        }
+                    }
                 }
             }
         });

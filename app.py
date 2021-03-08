@@ -144,13 +144,14 @@ def vaccination_view():
     App route to display India level vaccination data
     :return:
     """
-    dates, cumulative_data, daily_data, fully_vaccinated, daily_fully_vaccinated = Service().vaccination_data()
+    dates, cumulative_data, daily_data, fully_vaccinated, daily_fully_vaccinated, sources = Service().vaccination_data()
     context = {
         'dates': dates.tolist(),
         'cumulative_data': cumulative_data.tolist(),
         'daily_data': [0] + daily_data.tolist(),
         'fully_vaccinated': fully_vaccinated.tolist(),
         'daily_fully_vaccinated': [0] + daily_fully_vaccinated.tolist(),
+        'sources': sources.tolist(),
         'states': [v for k, v in Names.state_names.items()],
     }
     return render_template('vaccination.html', context=context)
