@@ -14,5 +14,6 @@ This is a work in progress and has been deployed [here](https://covid-19-india-d
 - [Flask](https://flask.palletsprojects.com/en/1.1.x/) framework
 - [Chart JS](https://www.chartjs.org/) for the bar and line charts
 - [HighCharts](https://www.highcharts.com/) for the India map
+- [Bootstrap](https://getbootstrap.com/) for frontend
 
 - Special mention to the [covid19india.org](https://www.covid19india.org/) team for the open source [APIs](https://api.covid19india.org/) with the data
