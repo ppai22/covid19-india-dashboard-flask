@@ -28,7 +28,7 @@
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" data-toggle="dropdown" id="navbarDropdownMenuLink" href="#" role="button" aria-haspopup="true" aria-expanded="false">State Pages</a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink" style="overflow-y: scroll; height: 500px">
                         {% for state in context['states'] %}
                             <a class="dropdown-item" href="/{{ state }}/">{{ state }}</a>
                         {% endfor %}
