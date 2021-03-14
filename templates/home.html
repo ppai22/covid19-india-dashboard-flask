@@ -34,7 +34,7 @@
                         <tbody>
                             {% for state, value in context['increasing_states'] %}
                             <tr>
-                                <td><a href="/{{ state }}">{{ state }}</a></td>
+                                <td><a class="text-decoration-none" href="/{{ state }}">{{ state }}</a></td>
                                 <td>{{ value }}</td>
                             </tr>
                             {% endfor %}
@@ -71,7 +71,7 @@
                         <tbody>
                             {% for state, value in context['decreasing_states'] %}
                             <tr>
-                                <td><a href="/{{ state }}">{{ state }}</a></td>
+                                <td><a class="text-decoration-none" href="/{{ state }}">{{ state }}</a></td>
                                 <td>{{ value }}</td>
                             </tr>
                             {% endfor %}

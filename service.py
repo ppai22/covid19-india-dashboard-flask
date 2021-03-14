@@ -193,7 +193,11 @@ class Service:
             this_week_increase = this_week[-1] - this_week[0]
             # TODO: Figure out best estimate (Increase or percentage increase?)
             if this_week_increase > 0:
-                increase_count[state] = this_week_increase
+                if max(this_week) == this_week[-1]:
+                    increase_count[state] = this_week_increase
+                else:
+                    if max(this_week) - this_week[-1] <= 0.10 * this_week[0]:
+                        increase_count[state] = this_week_increase
         return increase_count
 
     def get_recent_active_cases_decreasing_trend(self):
