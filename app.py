@@ -60,7 +60,7 @@ def details(state_code):
     return render_template('display.html', context=context)
 
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def home_page():
     """
     App route to display the home page with the map
@@ -80,6 +80,7 @@ def home_page():
     data = []
     for state in Names.state_names.keys():
         data.append([Names.state_names[state].lower(), dataset[state]])
+
     context = {
         'data': data,
         'states': [v for k, v in Names.state_names.items()],

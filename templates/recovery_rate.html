@@ -8,10 +8,15 @@
     <script src="https://code.highcharts.com/maps/modules/exporting.js"></script>
     <script src="https://code.highcharts.com/mapdata/countries/in/custom/in-all-disputed.js"></script>
 
-    <div class="center" style="text-align:center">
-        <h3>India Recovery rate</h3>
-        <h3>{{ context['india_recovery'] }} %</h3>
+    <div class="text-center">
+        <h1 class="p-3 mb-2 bg-success text-white">India Recovery rate</h1>
     </div>
+
+    <br>
+    <div class="progress mx-md-3" style="height: 5%">
+      <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: {{ context['india_recovery'] }}%;" aria-valuenow="{{ context['india_recovery'] }}" aria-valuemin="0" aria-valuemax="100">Recovery {{ context['india_recovery'] }}%</div>
+    </div>
+    <br>
 
     <div id="map"></div>
 

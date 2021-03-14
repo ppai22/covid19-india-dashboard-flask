@@ -1,20 +1,27 @@
 
-
 <title>Vaccination Data - India</title>
 
 {% extends "base.html" %}
 
 {% block content %}
 
-    <h2 align="center">Vaccination - India</h2>
+    <h1 class="p-3 mb-2 bg-success text-white text-center">Vaccination - India</h1>
     <h5 align="center">Data from <a href="https://github.com/owid/covid-19-data/blob/master/public/data/vaccinations/country_data/India.csv">Our World in Data</a></h5>
 
+    <br>
     <div id="Charts">
-        <div id="cumulativeChart">
-            <canvas id="VaccinationChart" height="100"></canvas>
+        <div class="card mx-md-3">
+            <div class="card-header">Cumulative Vaccination Data</div>
+            <div class="card-body">
+                <canvas id="VaccinationChart" height="100"></canvas>
+            </div>
         </div>
-        <div id="dailyChart">
-            <canvas id="DailyVaccinationChart" height="100"></canvas>
+        <br>
+        <div class="card mx-md-3">
+            <div class="card-header">Daily Vaccination Data</div>
+            <div class="card-body">
+                <canvas id="DailyVaccinationChart" height="100"></canvas>
+            </div>
         </div>
     </div>
 

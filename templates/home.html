@@ -1,18 +1,4 @@
 
-
-<style>
-.center {
-    margin-left: auto;
-    margin-right: auto;
-    column-gap: 20px;
-}
-
-.center th {
-    padding: 0 10px;
-}
-
-</style>
-
 {% extends "base.html" %}
 
 {% block content %}
@@ -21,40 +7,17 @@
     <script src="https://code.highcharts.com/maps/modules/exporting.js"></script>
     <script src="https://code.highcharts.com/mapdata/countries/in/custom/in-all-disputed.js"></script>
 
-    <div class="details" style="width:100%">
-        <table class="center">
-            <tr>
-                <th>
-                    <h3>Total Active</h3>
-                    <h3>{{ context['dataset']['Total Active'][-1] }}</h3>
-                </th>
-                <th>
-                    <h3>Total Recovered</h3>
-                    <h3>{{ context['dataset']['Total Recovered'][-1] }}</h3>
-                </th>
-                <th>
-                    <h3>Total Deceased</h3>
-                    <h3>{{ context['dataset']['Total Deceased'][-1] }}</h3>
-                </th>
-            </tr>
-            <tr>
-                <th>
-                    <h3>Confirmed Yesterday</h3>
-                    <h3>{{ context['dataset']['Confirmed'][-1] }}</h3>
-                </th>
-                <th>
-                    <h3>Recovered Yesterday</h3>
-                    <h3>{{ context['dataset']['Recovered'][-1] }}</h3>
-                </th>
-                <th>
-                    <h3>Deceased Yesterday</h3>
-                    <h3>{{ context['dataset']['Deceased'][-1] }}</h3>
-                </th>
-            </tr>
-        </table>
-    </div>
 
-    <div id="map"></div>
+    <h1 class="p-3 mb-2 bg-secondary text-white text-center">Overview</h1>
+
+    <br>
+    <div class="card mx-md-3">
+        <div class="card-header">Active Cases by State</div>
+        <div class="card-body">
+            <div id="map"></div>
+        </div>
+    </div>
+    <br>
 
     <script>
         Highcharts.mapChart('map', {

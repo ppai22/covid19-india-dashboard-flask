@@ -1,19 +1,6 @@
 
-
 <title>Covid 19 India Dashboard - {{ context['name']|safe }}</title>
 
-<style>
-.center {
-    margin-left: auto;
-    margin-right: auto;
-    column-gap: 20px;
-}
-
-.center th {
-    padding: 0 10px;
-}
-
-</style>
 
 {% extends "base.html" %}
 
@@ -21,108 +8,119 @@
 
     {% if 'form' in context %}
 
-        <form action="" method="POST">
-            {{ context['form'].csrf_token }}
-            <p>
-                {{ context['form'].state.label }} {{ context['form'].state }}
-                <input type="submit" value="Search">
-            </p>
-        </form>
+        <div class="p-3 mx-md-3">
+            <form action="" method="POST">
+                {{ context['form'].csrf_token }}
+                <p>
+                    {{ context['form'].state.label }} {{ context['form'].state }}
+                    <input type="submit" value="Search">
+                </p>
+            </form>
+        </div>
 
     {% endif %}
 
     {% if 'name' in context %}
 
-        <h2 align="center">{{ context['name']|safe }}</h2>
+        <h1 class="p-3 mb-2 bg-secondary text-white text-center">{{ context['name']|safe }}</h1>
 
-        <div class="details" style="width:100%">
-            <table class="center">
-                <tr>
-                    <th>
-                        <h3>Total Active</h3>
-                        <h3>{{ context['dataset']['Total Active'][-1] }}</h3>
-                    </th>
-                    <th>
-                        <h3>Total Recovered</h3>
-                        <h3>{{ context['dataset']['Total Recovered'][-1] }}</h3>
-                    </th>
-                    <th>
-                        <h3>Total Deceased</h3>
-                        <h3>{{ context['dataset']['Total Deceased'][-1] }}</h3>
-                    </th>
-                </tr>
-                <tr>
-                    <th>
-                        <h3>Confirmed Yesterday</h3>
-                        <h3>{{ context['dataset']['Confirmed'][-1] }}</h3>
-                    </th>
-                    <th>
-                        <h3>Recovered Yesterday</h3>
-                        <h3>{{ context['dataset']['Recovered'][-1] }}</h3>
-                    </th>
-                    <th>
-                        <h3>Deceased Yesterday</h3>
-                        <h3>{{ context['dataset']['Deceased'][-1] }}</h3>
-                    </th>
-                </tr>
-            </table>
+        <div class="accordion" id="accordion">
+            <div class="card mx-md-3">
+                <div class="card-header" id="heading">
+                    <!-- Need to add js code to change symbol on collapse and show -->
+                    <button class="btn" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                        Overview
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-caret-down-fill" viewBox="0 0 16 16">
+                            <path d="M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
+                        </svg>
+                    </button>
+                </div>
+                <div id="collapseOne" class="collapse" aria-labelledby="heading" data-parent="#accordion">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table text-center">
+                                <tbody>
+                                    <tr>
+                                        <th>
+                                            <h3>Total Active</h3>
+                                            <h3>{{ context['dataset']['Total Active'][-1] }}</h3>
+                                        </th>
+                                        <th>
+                                            <h3>Total Recovered</h3>
+                                            <h3>{{ context['dataset']['Total Recovered'][-1] }}</h3>
+                                        </th>
+                                        <th>
+                                            <h3>Total Deceased</h3>
+                                            <h3>{{ context['dataset']['Total Deceased'][-1] }}</h3>
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <th>
+                                            <h3>Confirmed Yesterday</h3>
+                                            <h3>{{ context['dataset']['Confirmed'][-1] }}</h3>
+                                        </th>
+                                        <th>
+                                            <h3>Recovered Yesterday</h3>
+                                            <h3>{{ context['dataset']['Recovered'][-1] }}</h3>
+                                        </th>
+                                        <th>
+                                            <h3>Deceased Yesterday</h3>
+                                            <h3>{{ context['dataset']['Deceased'][-1] }}</h3>
+                                        </th>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
+
+        <br>
+        <div class="progress mx-md-3" style="height: 5%">
+          <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: {{ context['recovery_rate']|safe }}%;" aria-valuenow="{{ context['recovery_rate']|safe }}" aria-valuemin="0" aria-valuemax="100">Recovery {{ context['recovery_rate']|safe }}%</div>
+        </div>
+        <br>
 
         <div id="barCharts">
-            <div id="recovery_rate">
-                <canvas id="RecoveryRate" height="50"></canvas>
+            <div class="card mx-md-3">
+                <div class="card-header">Confirmed Cases</div>
+                <div class="card-body">
+                    <canvas id="ConfirmedChart" height="100"></canvas>
+                </div>
             </div>
-            <div id="confirmed">
-                <canvas id="ConfirmedChart" height="100"></canvas>
+            <br>
+            <div class="card mx-md-3">
+                <div class="card-header">Seven Day Average Confirmed Cases</div>
+                <div class="card-body">
+                    <canvas id="SevenDayAvgChart" height="100"></canvas>
+                </div>
             </div>
-            <div id="seven_day_avg">
-                <canvas id="SevenDayAvgChart" height="100"></canvas>
+            <br>
+            <div class="card mx-md-3">
+                <div class="card-header">Recoveries</div>
+                <div class="card-body">
+                    <canvas id="RecoveredChart" height="100"></canvas>
+                </div>
             </div>
-            <div id="recovered">
-                <canvas id="RecoveredChart" height="100"></canvas>
-            </div>
-            <div id="deceased">
-                <canvas id="DeceasedChart" height="100"></canvas>
+            <br>
+            <div class="card mx-md-3">
+                <div class="card-header">Deceased</div>
+                <div class="card-body">
+                    <canvas id="DeceasedChart" height="100"></canvas>
+                </div>
             </div>
         </div>
-        <div id="lineChart">
-            <canvas id="CumulativeChart" height="150"></canvas>
+        <br>
+        <div class="card mx-md-3">
+            <div class="card-header">Cumulative Data</div>
+            <div class="card-body">
+                <canvas id="CumulativeChart" height="150"></canvas>
+            </div>
         </div>
+        <br>
 
         <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
-        <script>
-            var ctx_recovery_rate = document.getElementById('RecoveryRate').getContext('2d');
-            var chart = new Chart(ctx_recovery_rate, {
-                type: 'doughnut',
-                data: {
-                        datasets: [{
-                            data: [{{ context['recovery_rate']|safe }}, 100 - {{ context['recovery_rate']|safe }}],
-                            borderColor: [
-                                'rgb(61, 130, 56)',
-                                'rgb(219, 34, 18)'
-                            ],
-                            backgroundColor: [
-                                'rgba(61, 130, 56, 0.3)',
-                                'rgba(219, 34, 18, 0.3)'
-                            ]
-                        }],
-                        labels: [
-                            'Recovered',
-                            'Active'
-                        ],
-                    },
-                options: {
-                    title: {
-                        display: true,
-                        text: 'Recovery Rate',
-                        fontSize: 22,
-                        fontColor: 'rgb(61, 130, 56)'
-                    },
-                    rotation: - Math.PI,
-                    circumference: Math.PI
-                }
-            });
-        </script>
 
         <script>
             var ctx_confirmed = document.getElementById('ConfirmedChart').getContext('2d');

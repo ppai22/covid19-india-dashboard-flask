@@ -1,121 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
     <meta charset="UTF-8">
     <title>Covid19 India Dashboard</title>
 </head>
-<style>
-
-.header {
-    margin: 10px;
-    padding: 10px;
-}
-
-.banner {
-    font-family: "Arial", sans-serif;
-    text-align: center;
-}
-
-.topnav {
-    margin: 20px;
-}
-
-.topnav a{
-    padding: 10px;
-    font-family: "Arial", sans-serif;
-    font-size: 20px;
-    text-decoration: none;
-    border-style: solid;
-    border-width: 1px;
-    color: black;
-}
-
-.topnav a:hover{
-    background-color: black;
-    color: white;
-}
-.dropbtn {
-    padding: 10px;
-    font-size: 20px;
-    background-color: white;
-    border-style: solid;
-    border-width: 1px;
-}
-
-.dropbtn:hover {
-    background-color: black;
-    color: white;
-}
-
-.dropdown {
-    font-size: 20px;
-    position: relative;
-    display: inline-block;
-}
-
-.dropdown-content {
-    display: none;
-    position: absolute;
-    background-color: white;
-    min-width: 320px;
-    z-index: 1;
-}
-
-.dropdown-content a {
-    font-size: 20px;
-    color: black;
-    padding: 12px 16px;
-    text-decoration: none;
-    display: block;
-}
-
-.dropdown:hover .dropdown-content {display: block;}
-
-.body-content {
-    font-family: "Arial";
-    padding: 20px;
-    margin: 20px;
-    border-style: groove;
-    border-width: 2px;
-    border-radius: 10px;
-}
-
-.footer {
-    margin: 20px;
-    font-family: "Arial";
-    text-align: center;
-}
-
-</style>
 <body>
 
-<div class="header">
-    <div class="banner">
-        <h1>Covid 19 India Dashboard</h1>
-    </div>
-</div>
+<div class="container">
+    <div class="p-3 mb-3">
+    <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand mx-md-3" href="/">Covid 19 India Dashboard</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
-<div class="topnav">
-    <a href="/">Home</a>
-    <a href="/India/">India Data</a>
-    <a href="/states/">States</a>
-    <div class="dropdown">
-        <button class="dropbtn">State Pages</button>
-        <div class="dropdown-content">
-            {% for state in context['states'] %}
-                <a href="/{{ state }}/">{{ state }}</a>
-            {% endfor %}
+        <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
+            <ul class="navbar-nav mx-md-3">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/India/">India Data</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/states/">States</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" id="navbarDropdownMenuLink" href="#" role="button" aria-haspopup="true" aria-expanded="false">State Pages</a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        {% for state in context['states'] %}
+                            <a class="dropdown-item" href="/{{ state }}/">{{ state }}</a>
+                        {% endfor %}
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/comparison/">States Comparison</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/recovery/">Recovery Rates</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/vaccination/">Vaccination</a>
+                </li>
+            </ul>
         </div>
+    </nav>
     </div>
-    <a href="/comparison/">States Comparison</a>
-    <a href="/recovery/">Recovery Rates</a>
-    <a href="/vaccination/">Vaccination</a>
 </div>
 
-<div class="body-content">
-    {% block content %}
+<br>
 
-    {% endblock %}
+<div class="container">
+    <div class="border border-dark rounded">
+        {% block content %}
+
+        {% endblock %}
+    </div>
 </div>
 
 <script>
@@ -124,13 +65,17 @@
     }
 </script>
 
-<div class="footer">
-    <a>Built by <a href="https://github.com/ppai22" target="_blank">@ppai22</a></a>
-    <a>&#9670;</a>
-    <a>Check out the repo <a href="https://github.com/ppai22/covid19-india-dashboard-flask" target="_blank">here</a></a>
-    <a>&#9670;</a>
-    <a>Data from <a href="https://api.covid19india.org/" target="_blank">api.covid19india.org</a></a>
+<div class="container">
+    <div class="p-3 mx-md-3 text-center">
+        <a>Built by <a href="https://github.com/ppai22" target="_blank">@ppai22</a></a>
+        <a>&#9670;</a>
+        <a>Check out the repo <a href="https://github.com/ppai22/covid19-india-dashboard-flask" target="_blank">here</a></a>
+        <a>&#9670;</a>
+        <a>Data from <a href="https://api.covid19india.org/" target="_blank">api.covid19india.org</a></a>
+    </div>
 </div>
-
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
 </body>
 </html>

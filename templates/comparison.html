@@ -4,11 +4,16 @@
 
 {% block content %}
 
-    <h2 align="center">Comparison between states</h2>
+    <h1 class="p-3 mb-2 bg-secondary text-white text-center">Comparison</h1>
 
-    <div id="lineChart">
-        <canvas id="comparisonActiveCases" height="150"></canvas>
+    <br>
+    <div class="card mx-md-3">
+        <div class="card-header">Comparison between highest ten states</div>
+        <div class="card-body">
+            <canvas id="comparisonActiveCases" height="150"></canvas>
+        </div>
     </div>
+    <br>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
 
