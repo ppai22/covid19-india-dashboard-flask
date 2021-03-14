@@ -81,11 +81,22 @@ def home_page():
     for state in Names.state_names.keys():
         data.append([Names.state_names[state].lower(), dataset[state]])
 
+    # Increasing and Decreasing trends
+    increase_states = Service().get_recent_active_cases_increasing_trend()
+    decrease_states = Service().get_recent_active_cases_decreasing_trend()
+    increasing_states = [(Names.state_names[state_code], round(val, 2))
+                         for state_code, val in increase_states.items() if state_code not in ('un', 'tt')]
+    decreasing_states = [(Names.state_names[state_code], round(val, 2))
+                         for state_code, val in decrease_states.items() if state_code not in ('un', 'tt')]
+    increasing_states.sort(key=lambda x: x[-1], reverse=True)
+    decreasing_states.sort(key=lambda x: x[-1])
     context = {
         'data': data,
         'states': [v for k, v in Names.state_names.items()],
         'dataset': india_data,
-        'table_data': table_data
+        'table_data': table_data,
+        'increasing_states': increasing_states[:10],
+        'decreasing_states': decreasing_states[:10],
     }
     return render_template('home.html', context=context)
 

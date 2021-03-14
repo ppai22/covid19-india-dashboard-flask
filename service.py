@@ -180,3 +180,33 @@ class Service:
         daily_full_vaccination = numpy.diff(fully_vaccinated)
         sources = numpy.array(data['source_url'])
         return dates, cumulative_vaccination, daily_vaccination, fully_vaccinated, daily_full_vaccination, sources
+
+    def get_recent_active_cases_increasing_trend(self):
+        """
+        Method that fetches states with increasing trend in active cases
+        :return: dict - {'state_code': increase}
+        """
+        active_cases, dates, seven_day_avg = self.tabulate()
+        increase_count = {}
+        for state, data in active_cases.items():
+            this_week = data['Total Active'][-7:]
+            this_week_increase = this_week[-1] - this_week[0]
+            # TODO: Figure out best estimate (Increase or percentage increase?)
+            if this_week_increase > 0:
+                increase_count[state] = this_week_increase
+        return increase_count
+
+    def get_recent_active_cases_decreasing_trend(self):
+        """
+        Method that fetches states with decreasing trend in active cases
+        :return: dict - {'state_code': decrease}
+        """
+        active_cases, dates, seven_day_avg = self.tabulate()
+        decrease_count = {}
+        for state, data in active_cases.items():
+            this_week = data['Total Active'][-7:]
+            this_week_decrease = this_week[-1] - this_week[0]
+            # TODO: Figure out best estimate (Decrease or percentage decrease?)
+            if this_week_decrease <= 0:
+                decrease_count[state] = this_week_decrease
+        return decrease_count
