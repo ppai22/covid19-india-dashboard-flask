@@ -90,6 +90,16 @@ def home_page():
                          for state_code, val in decrease_states.items() if state_code not in ('un', 'tt')]
     increasing_states.sort(key=lambda x: x[-1], reverse=True)
     decreasing_states.sort(key=lambda x: x[-1])
+
+    # States Active cases pie chart data
+    state_codes = table_data[0]
+    state_active_cases = table_data[2]
+    state_active_cases_data = list(zip(state_codes, state_active_cases))
+    state_active_cases_data.sort(key=lambda x: x[-1], reverse=True)
+    roi_sum = sum([v for _, v in state_active_cases_data[10:]])
+    state_active_cases_data = state_active_cases_data[:10]
+    state_active_cases_data_states = [k for k, v in state_active_cases_data]
+    state_active_cases_data_values = [v for k, v in state_active_cases_data]
     context = {
         'data': data,
         'states': [v for k, v in Names.state_names.items()],
@@ -97,6 +107,8 @@ def home_page():
         'table_data': table_data,
         'increasing_states': increasing_states[:10],
         'decreasing_states': decreasing_states[:10],
+        'active_cases_pie_states': state_active_cases_data_states + ['Rest of India'],
+        'active_cases_pie_values': state_active_cases_data_values + [roi_sum]
     }
     return render_template('home.html', context=context)
 
