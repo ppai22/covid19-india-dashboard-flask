@@ -21,6 +21,9 @@ class Service:
     VACCINATION_URL = \
         "https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/vaccinations/country_data/India.csv"
 
+    def __init__(self):
+        self.data = self.load_data()
+
     def load_data(self):
         """
         Method to load data from the API
@@ -35,7 +38,7 @@ class Service:
         Method that tabulates the data into a dictonary in the required format
         :return: dict
         """
-        data = self.load_data()
+        data = self.data
         dataset = {}
         seven_day_avg = {}
         dates = []
@@ -131,7 +134,7 @@ class Service:
         Method to fetch only the active cases to display on home page
         :return: dict
         """
-        data = self.load_data()
+        data = self.data
         dataset = {}
         active_cases_states = {}
         for state in self.STATES:

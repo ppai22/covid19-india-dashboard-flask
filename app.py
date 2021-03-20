@@ -14,6 +14,8 @@ app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
 csrf = CSRFProtect(app)
 csrf.init_app(app)
 
+service = Service()
+
 
 @app.route('/states/', methods=['GET', 'POST'])
 def state_data():
@@ -42,8 +44,8 @@ def details(state_code):
     :param state_code: str name of the state
     :return:
     """
-    dataset, dates, seven_day_avg = Service().load_state_data(state_code)
-    recovery_rate = Service().get_recovery_rate()[Names.get_code_from_name(state_code)]
+    dataset, dates, seven_day_avg = service.load_state_data(state_code)
+    recovery_rate = service.get_recovery_rate()[Names.get_code_from_name(state_code)]
     if state_code != 'all':
         name = Names.state_names[Names.get_code_from_name(state_code)]
     else:
@@ -66,8 +68,8 @@ def home_page():
     App route to display the home page with the map
     :return:
     """
-    dataset = Service().get_total_active_all_states()
-    all_data = Service().get_all_stats_last_day_all()
+    dataset = service.get_total_active_all_states()
+    all_data = service.get_all_stats_last_day_all()
     table_data = [[], [], [], [], []]
     for state, state_data in all_data.items():
         if state != "India":
@@ -76,14 +78,14 @@ def home_page():
             table_data[2].append(state_data['total_active'])
             table_data[3].append(state_data['total_recovered'])
             table_data[4].append(state_data['total_deceased'])
-    india_data, _, _ = Service().load_state_data('India')
+    india_data, _, _ = service.load_state_data('India')
     data = []
     for state in Names.state_names.keys():
         data.append([Names.state_names[state].lower(), dataset[state]])
 
     # Increasing and Decreasing trends
-    increase_states = Service().get_recent_active_cases_increasing_trend()
-    decrease_states = Service().get_recent_active_cases_decreasing_trend()
+    increase_states = service.get_recent_active_cases_increasing_trend()
+    decrease_states = service.get_recent_active_cases_decreasing_trend()
     increasing_states = [(Names.state_names[state_code], round(val, 2))
                          for state_code, val in increase_states.items() if state_code not in ('un', 'tt')]
     decreasing_states = [(Names.state_names[state_code], round(val, 2))
@@ -122,7 +124,7 @@ def comparison():
     top_ten_active = {}
     top_ten_active_states = []
     latest_active = []
-    dataset, dates, seven_day_avg = Service().tabulate()
+    dataset, dates, seven_day_avg = service.tabulate()
     state_names = Names.state_names
     for state in state_names:
         if state != 'tt':
@@ -149,7 +151,7 @@ def recovery_rate():
     App route to display the recovery rates
     :return:
     """
-    recovery_data = Service().get_recovery_rate()
+    recovery_data = service.get_recovery_rate()
     data = []
     for state in Names.state_names.keys():
         data.append([Names.state_names[state].lower(), recovery_data[state]])
@@ -168,7 +170,7 @@ def vaccination_view():
     App route to display India level vaccination data
     :return:
     """
-    dates, cumulative_data, daily_data, fully_vaccinated, daily_fully_vaccinated, sources = Service().vaccination_data()
+    dates, cumulative_data, daily_data, fully_vaccinated, daily_fully_vaccinated, sources = service.vaccination_data()
     context = {
         'dates': dates.tolist(),
         'cumulative_data': cumulative_data.tolist(),
