@@ -33,6 +33,18 @@ class Service:
         data = r.json()
         return data
 
+    def fetch_dates(self):
+        """
+        Method to fetch dates only
+        :return:
+        """
+        data = self.data
+        dates = []
+        for item in data['states_daily']:
+            dates.append(item['date'])
+            dates = list(dict.fromkeys(dates))
+        return dates
+
     def tabulate(self):
         """
         Method that tabulates the data into a dictonary in the required format
@@ -41,6 +53,7 @@ class Service:
         data = self.data
         dataset = {}
         seven_day_avg = {}
+        seven_day_avg_deaths = {}
         dates = []
         for state in self.STATES:
             dataset[state] = {
@@ -87,15 +100,17 @@ class Service:
         for state in self.STATES:
             seven_day_avg[state] = [round(sum([int(val) for val in dataset[state]['Confirmed'][i-6:i+1]])/7)
                                     for i in range(7, len(dataset[state]['Confirmed']))]
+            seven_day_avg_deaths[state] = [round(sum([int(val) for val in dataset[state]['Deceased'][i-6:i+1]])/7)
+                                           for i in range(7, len(dataset[state]['Deceased']))]
 
-        return dataset, dates, seven_day_avg
+        return dataset, dates, seven_day_avg, seven_day_avg_deaths
 
     def get_all_stats_last_day_all(self):
         """
         Returns latest data for all states for all parameters
         :return: dict
         """
-        dataset, dates, seven_day_avg = self.tabulate()
+        dataset, dates, seven_day_avg, seven_day_avg_deaths = self.tabulate()
         states = [k for k, v in Names.state_names.items() if k != 'tt']
         return_dict = {}
         for state in states:
@@ -116,18 +131,25 @@ class Service:
         Method to get latest recovery rate of all states
         :return: dict
         """
-        dataset, _, _ = self.tabulate()
+        dataset, _, _, _ = self.tabulate()
         recovery_data = {}
+        recovery_data_trend = {}
         for state in Names.state_names:
             active = dataset[state]['Total Active'][-1]
             recovered = dataset[state]['Total Recovered'][-1]
             deceased = dataset[state]['Total Deceased'][-1]
+            active_total = numpy.array([int(i) for i in dataset[state]['Total Active']])
+            recovered_total = numpy.array([int(i) for i in dataset[state]['Total Recovered']])
+            deceased_total = numpy.array([int(i) for i in dataset[state]['Total Deceased']])
             confirmed = active + recovered + deceased
+            confirmed_total = active_total + recovered_total + deceased_total
             if int(confirmed) != 0:
                 recovery_data[state] = round(int(recovered) / int(confirmed) * 100, 2)
             else:
                 recovery_data[state] = 100
-        return recovery_data
+            recovery_data_trend[state] = numpy.nan_to_num(numpy.round(recovered_total / confirmed_total * 100, 2))
+            recovery_data_trend[state] = recovery_data_trend[state].tolist()
+        return recovery_data, recovery_data_trend
 
     def get_total_active_all_states(self):
         """
@@ -164,11 +186,11 @@ class Service:
         """
         state = Names.get_code_from_name(name)
         if name == 'all':
-            dataset, dates, seven_day_avg = self.tabulate()
-            return dataset['tt'], dates, seven_day_avg['tt']
+            dataset, dates, seven_day_avg, seven_day_avg_deaths = self.tabulate()
+            return dataset['tt'], dates, seven_day_avg['tt'], seven_day_avg_deaths['tt']
         else:
-            dataset, dates, seven_day_avg = self.tabulate()
-            return dataset[state], dates, seven_day_avg[state]
+            dataset, dates, seven_day_avg, seven_day_avg_deaths = self.tabulate()
+            return dataset[state], dates, seven_day_avg[state], seven_day_avg_deaths[state]
 
     def vaccination_data(self):
         """
@@ -189,7 +211,7 @@ class Service:
         Method that fetches states with increasing trend in active cases
         :return: dict - {'state_code': increase}
         """
-        active_cases, dates, seven_day_avg = self.tabulate()
+        active_cases, dates, seven_day_avg, seven_day_avg_deaths = self.tabulate()
         increase_count = {}
         for state, data in active_cases.items():
             this_week = data['Total Active'][-7:]
@@ -208,7 +230,7 @@ class Service:
         Method that fetches states with decreasing trend in active cases
         :return: dict - {'state_code': decrease}
         """
-        active_cases, dates, seven_day_avg = self.tabulate()
+        active_cases, dates, seven_day_avg, seven_day_avg_deaths = self.tabulate()
         decrease_count = {}
         for state, data in active_cases.items():
             this_week = data['Total Active'][-7:]

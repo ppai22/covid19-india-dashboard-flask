@@ -117,11 +117,26 @@
             </div>
             <br>
             <div class="card mx-md-3">
+                <div class="card-header">Recovery Rate</div>
+                <div class="card-body">
+                    <canvas id="RecoveryRateChart" height="100"></canvas>
+                </div>
+            </div>
+            <br>
+            <div class="card mx-md-3">
                 <div class="card-header">Deceased</div>
                 <div class="card-body">
                     <canvas id="DeceasedChart" height="100"></canvas>
                 </div>
             </div>
+            <br>
+            <div class="card mx-md-3">
+                <div class="card-header">Seven Day Average Deaths</div>
+                <div class="card-body">
+                    <canvas id="SevenDayAvgDeathsChart" height="100"></canvas>
+                </div>
+            </div>
+            <br>
         </div>
         <br>
         <div class="card mx-md-3">
@@ -211,6 +226,32 @@
                 }
             });
 
+            var ctx_recovery_rate = document.getElementById('RecoveryRateChart').getContext('2d');
+            var chart = new Chart(ctx_recovery_rate, {
+                type: 'line',
+                data: {
+                    labels: {{ context['dates']|safe }},
+                    datasets: [{
+                        label: 'Recovery Rate Variation',
+                        borderColor: 'rgb(61, 130, 56)',
+                        borderWidth: 1.5,
+                        backgroundColor: 'rgba(61, 130, 56, 0.2)',
+                        pointBorderWidth: 0.1,
+                        data: {{ context['recovery_rate_trend']|safe }}
+                    }
+                    ]
+                },
+                options: {
+                    title: {
+                        display: true,
+                        position: 'left',
+                        text: 'Recovery Rate Variation',
+                        fontSize: 22,
+                        fontColor: 'rgb(61, 130, 56)'
+                    }
+                }
+            });
+
             var ctx_deceased = document.getElementById('DeceasedChart').getContext('2d');
             var chart = new Chart(ctx_deceased, {
                 type: 'bar',
@@ -235,6 +276,34 @@
                     }
                 }
             });
+
+            var ctx_seven_day_avg_deaths = document.getElementById('SevenDayAvgDeathsChart').getContext('2d');
+            var chart = new Chart(ctx_seven_day_avg_deaths, {
+                type: 'line',
+                data: {
+                    labels: {{ context['dates_seven_day_avg']|safe }},
+                    datasets: [
+                        {
+                            label: 'Seven Days Average Deaths',
+                            borderColor: 'rgb(130, 117, 116)',
+                            borderWidth: 1.5,
+                            backgroundColor: 'rgba(130, 117, 116, 0.2)',
+                            pointBorderWidth: 0.1,
+                            data: {{ context['seven_day_avg_deaths']|safe }}
+                        }
+                    ]
+                },
+                options: {
+                    title: {
+                        display: true,
+                        position: 'left',
+                        text: 'Seven Days Average Deaths',
+                        fontSize: 22,
+                        fontColor: 'rgb(130, 117, 116)'
+                    }
+                }
+            });
+
 
             var ctx_cumulative = document.getElementById('CumulativeChart').getContext('2d');
             var chart = new Chart(ctx_cumulative, {

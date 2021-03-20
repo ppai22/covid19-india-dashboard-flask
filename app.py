@@ -44,8 +44,9 @@ def details(state_code):
     :param state_code: str name of the state
     :return:
     """
-    dataset, dates, seven_day_avg = service.load_state_data(state_code)
-    recovery_rate = service.get_recovery_rate()[Names.get_code_from_name(state_code)]
+    dataset, dates, seven_day_avg, seven_day_avg_deaths = service.load_state_data(state_code)
+    recovery_rate = service.get_recovery_rate()[0][Names.get_code_from_name(state_code)]
+    recovery_rate_trend = service.get_recovery_rate()[1][Names.get_code_from_name(state_code)]
     if state_code != 'all':
         name = Names.state_names[Names.get_code_from_name(state_code)]
     else:
@@ -56,8 +57,10 @@ def details(state_code):
         'name': name,
         'states': [v for k, v in Names.state_names.items()],
         'seven_day_avg': seven_day_avg,
+        'seven_day_avg_deaths': seven_day_avg_deaths,
         'dates_seven_day_avg': dates[7:],
-        'recovery_rate': recovery_rate
+        'recovery_rate': recovery_rate,
+        'recovery_rate_trend': recovery_rate_trend
     }
     return render_template('display.html', context=context)
 
@@ -78,7 +81,7 @@ def home_page():
             table_data[2].append(state_data['total_active'])
             table_data[3].append(state_data['total_recovered'])
             table_data[4].append(state_data['total_deceased'])
-    india_data, _, _ = service.load_state_data('India')
+    india_data, _, _, _ = service.load_state_data('India')
     data = []
     for state in Names.state_names.keys():
         data.append([Names.state_names[state].lower(), dataset[state]])
@@ -124,7 +127,7 @@ def comparison():
     top_ten_active = {}
     top_ten_active_states = []
     latest_active = []
-    dataset, dates, seven_day_avg = service.tabulate()
+    dataset, dates, seven_day_avg, seven_day_avg_deaths = service.tabulate()
     state_names = Names.state_names
     for state in state_names:
         if state != 'tt':
@@ -151,15 +154,18 @@ def recovery_rate():
     App route to display the recovery rates
     :return:
     """
-    recovery_data = service.get_recovery_rate()
+    recovery_data, recovery_data_trend = service.get_recovery_rate()
+    dates = service.fetch_dates()
     data = []
     for state in Names.state_names.keys():
         data.append([Names.state_names[state].lower(), recovery_data[state]])
     india_recovery = recovery_data['tt']
     context = {
+        'dates': dates,
         'data': data,
         'states': [v for k, v in Names.state_names.items()],
-        'india_recovery': india_recovery
+        'india_recovery': india_recovery,
+        'recovery_rate_trend': recovery_data_trend['tt'],
     }
     return render_template('recovery_rate.html', context=context)
 

@@ -7,6 +7,7 @@
     <script src="https://code.highcharts.com/maps/highmaps.js"></script>
     <script src="https://code.highcharts.com/maps/modules/exporting.js"></script>
     <script src="https://code.highcharts.com/mapdata/countries/in/custom/in-all-disputed.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
 
     <div class="text-center">
         <h1 class="p-3 mb-2 bg-success text-white">India Recovery rate</h1>
@@ -18,9 +19,52 @@
     </div>
     <br>
 
-    <div id="map"></div>
+    <div id="barCharts">
+        <br>
+        <div class="card mx-md-3">
+            <div class="card-header">Recovery Rate</div>
+            <div class="card-body">
+                <canvas id="RecoveryRateChart" height="100"></canvas>
+            </div>
+        </div>
+        <br>
+    </div>
+
+    <div class="card mx-md-3">
+        <div class="card-header">Recovery Rates by State </div>
+        <div class="card-body">
+            <div id="map"></div>
+        </div>
+    </div>
+    <br>
 
     <script>
+        var ctx_recovery_rate = document.getElementById('RecoveryRateChart').getContext('2d');
+        var chart = new Chart(ctx_recovery_rate, {
+            type: 'line',
+            data: {
+                labels: {{ context['dates']|safe }},
+                datasets: [{
+                    label: 'Recovery Rate Variation',
+                    borderColor: 'rgb(61, 130, 56)',
+                    borderWidth: 1.5,
+                    backgroundColor: 'rgba(61, 130, 56, 0.2)',
+                    pointBorderWidth: 0.1,
+                    data: {{ context['recovery_rate_trend']|safe }}
+                }
+                ]
+            },
+            options: {
+                title: {
+                    display: true,
+                    position: 'left',
+                    text: 'Recovery Rate Variation',
+                    fontSize: 22,
+                    fontColor: 'rgb(61, 130, 56)'
+                }
+            }
+        });
+
         Highcharts.mapChart('map', {
             chart: {
                 map: 'countries/in/custom/in-all-disputed',
