@@ -37,15 +37,15 @@
                 {
                     label: 'Fully Vaccinated Data',
                     borderColor: 'rgb(61, 130, 56)',
-                    borderWidth: 1.5,
-                    backgroundColor: 'rgba(61, 130, 56, 0.7)',
+                    borderWidth: 2,
+                    backgroundColor: 'rgba(0, 0, 0, 0)',
                     data: {{ context['fully_vaccinated']|safe }}
                 },
                 {
                     label: 'Single Dose Data',
                     borderColor: 'rgb(255, 153, 0)',
-                    borderWidth: 1.5,
-                    backgroundColor: 'rgba(255, 153, 0, 0.2)',
+                    borderWidth: 2,
+                    backgroundColor: 'rgba(0, 0, 0, 0)',
                     data: {{ context['cumulative_data']|safe }}
                 }
                 ]

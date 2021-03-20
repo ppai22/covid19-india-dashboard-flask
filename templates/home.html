@@ -11,76 +11,78 @@
 
     <h1 class="p-3 mb-2 bg-secondary text-white text-center">Overview</h1>
 
-    <!-- States increasing trend -->
-    <div class="accordion" id="accordion-increase">
-        <div class="card mx-md-3">
-            <div class="card-header" id="heading-increase">
-                <!-- Need to add js code to change symbol on collapse and show -->
-                <button class="btn" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                    Top 10 states with increasing cases over last week
-                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-caret-down-fill" viewBox="0 0 16 16">
-                        <path d="M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
-                    </svg>
-                </button>
-            </div>
-            <div id="collapseOne" class="collapse" aria-labelledby="heading-increase" data-parent="#accordion-increase">
-                <div class="card-body">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th scope="col">State</th>
-                                <th scope="col">Increase</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for state, value in context['increasing_states'] %}
-                            <tr>
-                                <td><a class="text-decoration-none" href="/{{ state }}">{{ state }}</a></td>
-                                <td>{{ value }}</td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <br>
-
-    <!-- States decreasing trend -->
-    <div class="accordion" id="accordion-decrease">
-        <div class="card mx-md-3">
-            <div class="card-header" id="heading-decrease">
-                <!-- Need to add js code to change symbol on collapse and show -->
-                <button class="btn" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
-                    Top 10 states with decreasing cases over last week
-                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-caret-down-fill" viewBox="0 0 16 16">
-                        <path d="M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
-                    </svg>
-                </button>
-            </div>
-            <div id="collapseTwo" class="collapse" aria-labelledby="heading-decrease" data-parent="#accordion-decrease">
-                <div class="card-body">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th scope="col">State</th>
-                                <th scope="col">Decrease</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for state, value in context['decreasing_states'] %}
-                            <tr>
-                                <td><a class="text-decoration-none" href="/{{ state }}">{{ state }}</a></td>
-                                <td>{{ value }}</td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
+    <div class="row">
+        <!-- States increasing trend -->
+        <div class="col-sm-6 accordion" id="accordion-increase">
+            <div class="card mx-md-3">
+                <div class="card-header" id="heading-increase">
+                    <!-- Need to add js code to change symbol on collapse and show -->
+                    <button class="btn" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                        Top 10 states with increasing cases over last week
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-caret-down-fill" viewBox="0 0 16 16">
+                            <path d="M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
+                        </svg>
+                    </button>
+                </div>
+                <div id="collapseOne" class="collapse show" aria-labelledby="heading-increase" data-parent="#accordion-increase">
+                    <div class="card-body">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">State</th>
+                                    <th scope="col">Increase</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for state, value in context['increasing_states'] %}
+                                <tr>
+                                    <td><a class="text-decoration-none" href="/{{ state }}">{{ state }}</a></td>
+                                    <td>{{ value }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
+
+        <!-- States decreasing trend -->
+        <div class="col-sm-6 accordion" id="accordion-decrease">
+            <div class="card mx-md-3">
+                <div class="card-header" id="heading-decrease">
+                    <!-- Need to add js code to change symbol on collapse and show -->
+                    <button class="btn" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+                        Top 10 states with decreasing cases over last week
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-caret-down-fill" viewBox="0 0 16 16">
+                            <path d="M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/>
+                        </svg>
+                    </button>
+                </div>
+                <div id="collapseTwo" class="collapse show" aria-labelledby="heading-decrease" data-parent="#accordion-decrease">
+                    <div class="card-body">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">State</th>
+                                    <th scope="col">Decrease</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for state, value in context['decreasing_states'] %}
+                                <tr>
+                                    <td><a class="text-decoration-none" href="/{{ state }}">{{ state }}</a></td>
+                                    <td>{{ value }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
     </div>
     <br>
 

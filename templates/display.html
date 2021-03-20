@@ -183,8 +183,8 @@
                     datasets: [{
                         label: 'Seven Days Average New Cases',
                         borderColor: 'rgb(255, 153, 0)',
-                        borderWidth: 1.5,
-                        backgroundColor: 'rgba(255, 153, 0, 0.2)',
+                        borderWidth: 2,
+                        backgroundColor: 'rgba(0, 0, 0, 0)',
                         pointBorderWidth: 0.1,
                         data: {{ context['seven_day_avg']|safe }}
                     }
@@ -234,8 +234,8 @@
                     datasets: [{
                         label: 'Recovery Rate Variation',
                         borderColor: 'rgb(61, 130, 56)',
-                        borderWidth: 1.5,
-                        backgroundColor: 'rgba(61, 130, 56, 0.2)',
+                        borderWidth: 2,
+                        backgroundColor: 'rgba(0, 0, 0, 0)',
                         pointBorderWidth: 0.1,
                         data: {{ context['recovery_rate_trend']|safe }}
                     }
@@ -286,8 +286,8 @@
                         {
                             label: 'Seven Days Average Deaths',
                             borderColor: 'rgb(130, 117, 116)',
-                            borderWidth: 1.5,
-                            backgroundColor: 'rgba(130, 117, 116, 0.2)',
+                            borderWidth: 2,
+                            backgroundColor: 'rgba(0, 0, 0, 0)',
                             pointBorderWidth: 0.1,
                             data: {{ context['seven_day_avg_deaths']|safe }}
                         }
@@ -314,24 +314,24 @@
                     {
                         label: 'Deceased',
                         borderColor: 'rgb(130, 117, 116)',
-                        borderWidth: 1.5,
-                        backgroundColor: 'rgba(130, 117, 116, 0.1)',
+                        borderWidth: 2,
+                        backgroundColor: 'rgba(0, 0, 0, 0)',
                         pointBorderWidth: 0.1,
                         data: {{ context['dataset']['Total Deceased']|safe }}
                     },
                     {
                         label: 'Active',
                         borderColor: 'rgb(219, 34, 18)',
-                        borderWidth: 1.5,
-                        backgroundColor: 'rgba(219, 34, 18, 0.1)',
+                        borderWidth: 2,
+                        backgroundColor: 'rgba(0, 0, 0, 0)',
                         pointBorderWidth: 0.1,
                         data: {{ context['dataset']['Total Active']|safe }}
                     },
                     {
                         label: 'Recovered',
                         borderColor: 'rgb(61, 130, 56)',
-                        borderWidth: 1.5,
-                        backgroundColor: 'rgba(61, 130, 56, 0.1)',
+                        borderWidth: 2,
+                        backgroundColor: 'rgba(0, 0, 0, 0)',
                         pointBorderWidth: 0.1,
                         data: {{ context['dataset']['Total Recovered']|safe }}
                     },
