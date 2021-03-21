@@ -4,7 +4,7 @@ from flask import Flask, render_template, request, redirect
 from flask_wtf.csrf import CSRFProtect
 
 from config import Names
-from forms import SelectState
+from forms import DataDurationBox, SelectState
 from service import Service
 
 
@@ -37,7 +37,7 @@ def state_data():
     return render_template('display.html', context=context)
 
 
-@app.route('/<state_code>/')
+@app.route('/<state_code>/', methods=['GET', 'POST'])
 def details(state_code):
     """
     Generic endpoint to get to a state page via state_code
@@ -51,6 +51,18 @@ def details(state_code):
         name = Names.state_names[Names.get_code_from_name(state_code)]
     else:
         name = Names.state_names['tt']
+    # Checkbox form to display last 30 days data only
+    data_duration_form = DataDurationBox()
+    if data_duration_form.validate_on_submit():
+        checkbox_value = data_duration_form.checkbox.data
+        if checkbox_value:
+            for k, v in dataset.items():
+                dataset[k] = v[-30:]
+            dates = dates[-30:]
+            seven_day_avg = seven_day_avg[-30:]
+            seven_day_avg_deaths = seven_day_avg_deaths[-30:]
+            recovery_rate_trend = recovery_rate_trend[-30:]
+
     context = {
         'dataset': dataset,
         'dates': dates,
@@ -60,7 +72,8 @@ def details(state_code):
         'seven_day_avg_deaths': seven_day_avg_deaths,
         'dates_seven_day_avg': dates[7:],
         'recovery_rate': recovery_rate,
-        'recovery_rate_trend': recovery_rate_trend
+        'recovery_rate_trend': recovery_rate_trend,
+        'data_duration_form': data_duration_form
     }
     return render_template('display.html', context=context)
 

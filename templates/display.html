@@ -94,7 +94,27 @@
         </div>
         <br>
 
+        {% if 'data_duration_form' in context %}
+        <div class="p-3 mx-md-3 text-center">
+            <form action="" method="POST">
+                {{ context['data_duration_form'].csrf_token }}
+                <p>
+                    {{ context['data_duration_form'].checkbox(onchange="submit()") }}
+                    {{ context['data_duration_form'].checkbox.label }}
+                </p>
+            </form>
+        </div>
+
+        {% endif %}
+
         <div id="barCharts">
+            <div class="card mx-md-3">
+                <div class="card-header">Active Cases</div>
+                <div class="card-body">
+                    <canvas id="ActiveCasesChart" height="100"></canvas>
+                </div>
+            </div>
+            <br>
             <div class="card mx-md-3">
                 <div class="card-header">Confirmed Cases</div>
                 <div class="card-body">
@@ -150,6 +170,32 @@
         <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
 
         <script>
+            var ctx_active = document.getElementById('ActiveCasesChart').getContext('2d');
+            var chart = new Chart(ctx_active, {
+                type: 'line',
+                data: {
+                    labels: {{ context['dates']|safe }},
+                    datasets: [{
+                        label: 'Active Cases',
+                        borderColor: 'rgb(219, 34, 18)',
+                        borderWidth: 2,
+                        backgroundColor: 'rgba(0, 0, 0, 0)',
+                        pointBorderWidth: 0.1,
+                        data: {{ context['dataset']['Total Active']|safe }}
+                    }
+                    ]
+                },
+                options: {
+                    title: {
+                        display: true,
+                        position: 'left',
+                        text: 'Active cases by date',
+                        fontSize: 22,
+                        fontColor: 'rgb(219, 34, 18)'
+                    }
+                }
+            });
+
             var ctx_confirmed = document.getElementById('ConfirmedChart').getContext('2d');
             var chart = new Chart(ctx_confirmed, {
                 type: 'bar',
