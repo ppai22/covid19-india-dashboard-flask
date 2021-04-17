@@ -19,4 +19,4 @@ This is a work in progress and has been deployed [here](https://covid-19-india-d
 - [Twitter Dev Tools](https://developer.twitter.com/en) to embed tweets using [API](https://developer.twitter.com/en/docs/twitter-for-websites/timelines/guides/oembed-api)
 
 - Special mention to the [covid19india.org](https://www.covid19india.org/) team for the open source [APIs](https://api.covid19india.org/) with the data
-- Vaccination ata from [Our World in Data](https://github.com/owid/covid-19-data/blob/master/public/data/vaccinations/country_data/India.csv)
+- Vaccination data from [Our World in Data](https://github.com/owid/covid-19-data/blob/master/public/data/vaccinations/country_data/India.csv)
