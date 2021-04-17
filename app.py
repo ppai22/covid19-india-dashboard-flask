@@ -1,4 +1,5 @@
 import os
+import requests
 
 from flask import Flask, render_template, request, redirect
 from flask_wtf.csrf import CSRFProtect
@@ -126,7 +127,7 @@ def home_page():
         'increasing_states': increasing_states[:10],
         'decreasing_states': decreasing_states[:10],
         'active_cases_pie_states': state_active_cases_data_states + ['Rest of India'],
-        'active_cases_pie_values': state_active_cases_data_values + [roi_sum]
+        'active_cases_pie_values': state_active_cases_data_values + [roi_sum],
     }
     return render_template('home.html', context=context)
 
@@ -140,6 +141,7 @@ def comparison():
     top_ten_active = {}
     top_ten_active_states = []
     latest_active = []
+    tot_active_latest = []
     dataset, dates, seven_day_avg, seven_day_avg_deaths = service.tabulate()
     state_names = Names.state_names
     for state in state_names:
@@ -156,7 +158,9 @@ def comparison():
         'dataset': dataset,
         'dates': dates,
         'top_ten_active': top_ten_active,
-        'top_ten_active_states': top_ten_active_states
+        'top_ten_active_states': top_ten_active_states,
+        'latest_active': [v for _, v in latest_active],
+        'latest_active_state_names': [Names.state_names[state_name] for state_name in top_ten_active_states]
     }
     return render_template('comparison.html', context=context)
 
@@ -200,6 +204,22 @@ def vaccination_view():
         'states': [v for k, v in Names.state_names.items()],
     }
     return render_template('vaccination.html', context=context)
+
+
+@app.route('/tweets/')
+def tweets_view():
+    """
+    App route to display recent Tweets related to COVID-19
+    :return:
+    """
+    tweets_list = requests.get(
+        "https://publish.twitter.com/oembed?url=https://twitter.com/i/lists/1361644157220114433").json()
+    context = {
+        'states': [v for k, v in Names.state_names.items()],
+        'tweets_list': tweets_list,
+        'tweets_tab': tweets_list
+    }
+    return render_template('tweets.html', context=context)
 
 
 if __name__ == '__main__':

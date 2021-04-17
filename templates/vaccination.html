@@ -13,14 +13,14 @@
         <div class="card mx-md-3">
             <div class="card-header">Cumulative Vaccination Data</div>
             <div class="card-body">
-                <canvas id="VaccinationChart" height="100"></canvas>
+                <canvas id="VaccinationChart" height="150"></canvas>
             </div>
         </div>
         <br>
         <div class="card mx-md-3">
             <div class="card-header">Daily Vaccination Data</div>
             <div class="card-body">
-                <canvas id="DailyVaccinationChart" height="100"></canvas>
+                <canvas id="DailyVaccinationChart" height="150"></canvas>
             </div>
         </div>
         <br>
@@ -39,6 +39,7 @@
                     borderColor: 'rgb(61, 130, 56)',
                     borderWidth: 2,
                     backgroundColor: 'rgba(0, 0, 0, 0)',
+                    pointBorderWidth: 0.1,
                     data: {{ context['fully_vaccinated']|safe }}
                 },
                 {
@@ -46,6 +47,7 @@
                     borderColor: 'rgb(255, 153, 0)',
                     borderWidth: 2,
                     backgroundColor: 'rgba(0, 0, 0, 0)',
+                    pointBorderWidth: 0.1,
                     data: {{ context['cumulative_data']|safe }}
                 }
                 ]

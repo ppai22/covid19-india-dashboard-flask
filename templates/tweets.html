@@ -1,0 +1,15 @@
+
+<title>Covid 19 India Dashboard - Tweets</title>
+
+
+{% extends "base.html" %}
+
+{% block content %}
+
+    <h1 class="p-3 mb-2 bg-info text-white text-center">Tweets</h1>
+
+    <div class="tweets-container container w-50 p-3">
+        {{ context['tweets_list']['html']|safe }}
+    </div>
+
+{% endblock %}
