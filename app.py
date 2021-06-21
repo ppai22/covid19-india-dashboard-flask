@@ -7,6 +7,7 @@ from flask_wtf.csrf import CSRFProtect
 from config import Names
 from forms import DataDurationBox, SelectState
 from service import Service
+from states import get_states_linked_list
 
 
 app = Flask(__name__, template_folder='templates')
@@ -63,7 +64,7 @@ def details(state_code):
             seven_day_avg = seven_day_avg[-30:]
             seven_day_avg_deaths = seven_day_avg_deaths[-30:]
             recovery_rate_trend = recovery_rate_trend[-30:]
-
+    state_nodes = get_states_linked_list()
     context = {
         'dataset': dataset,
         'dates': dates,
@@ -74,7 +75,8 @@ def details(state_code):
         'dates_seven_day_avg': dates[7:],
         'recovery_rate': recovery_rate,
         'recovery_rate_trend': recovery_rate_trend,
-        'data_duration_form': data_duration_form
+        'data_duration_form': data_duration_form,
+        'state_nodes': state_nodes
     }
     return render_template('display.html', context=context)
 
