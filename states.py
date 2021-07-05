@@ -24,10 +24,11 @@ def get_states_linked_list():
     Method that creates a circular linked list to add to the carousel
     :return: dict - {State Name: Node as defined in State with prev and next pointers}
     """
-    n = len(Names.state_names)
+    n = len(Names.state_names) - 1
     state_nodes = []
     for i, k in enumerate(Names.state_names):
-        state_nodes.append(State(k, Names.state_names[k]))
+        if k != "un":
+            state_nodes.append(State(k, Names.state_names[k]))
 
     for i, state in enumerate(state_nodes):
         if i == 0:

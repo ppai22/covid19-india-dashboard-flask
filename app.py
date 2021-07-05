@@ -17,6 +17,7 @@ csrf = CSRFProtect(app)
 csrf.init_app(app)
 
 service = Service()
+state_nodes = get_states_linked_list()
 
 
 @app.route('/states/', methods=['GET', 'POST'])
@@ -64,12 +65,11 @@ def details(state_code):
             seven_day_avg = seven_day_avg[-30:]
             seven_day_avg_deaths = seven_day_avg_deaths[-30:]
             recovery_rate_trend = recovery_rate_trend[-30:]
-    state_nodes = get_states_linked_list()
     context = {
         'dataset': dataset,
         'dates': dates,
         'name': name,
-        'states': [v for k, v in Names.state_names.items()],
+        'states': [state for state in state_nodes],
         'seven_day_avg': seven_day_avg,
         'seven_day_avg_deaths': seven_day_avg_deaths,
         'dates_seven_day_avg': dates[7:],
@@ -123,7 +123,7 @@ def home_page():
     state_active_cases_data_values = [v for k, v in state_active_cases_data]
     context = {
         'data': data,
-        'states': [v for k, v in Names.state_names.items()],
+        'states': [state for state in state_nodes],
         'dataset': india_data,
         'table_data': table_data,
         'increasing_states': increasing_states[:10],
@@ -155,7 +155,7 @@ def comparison():
         top_ten_active[state] = dataset[state]['Total Active']
         top_ten_active_states.append(state)
     context = {
-        'states': [v for k, v in Names.state_names.items()],
+        'states': [state for state in state_nodes],
         'state_names': state_names,
         'dataset': dataset,
         'dates': dates,
@@ -182,7 +182,7 @@ def recovery_rate():
     context = {
         'dates': dates,
         'data': data,
-        'states': [v for k, v in Names.state_names.items()],
+        'states': [state for state in state_nodes],
         'india_recovery': india_recovery,
         'recovery_rate_trend': recovery_data_trend['tt'],
     }
@@ -203,7 +203,7 @@ def vaccination_view():
         'fully_vaccinated': fully_vaccinated.tolist(),
         'daily_fully_vaccinated': [0] + daily_fully_vaccinated.tolist(),
         'sources': sources.tolist(),
-        'states': [v for k, v in Names.state_names.items()],
+        'states': [state for state in state_nodes],
     }
     return render_template('vaccination.html', context=context)
 
@@ -217,7 +217,7 @@ def tweets_view():
     tweets_list = requests.get(
         "https://publish.twitter.com/oembed?url=https://twitter.com/i/lists/1361644157220114433").json()
     context = {
-        'states': [v for k, v in Names.state_names.items()],
+        'states': [state for state in state_nodes],
         'tweets_list': tweets_list,
         'tweets_tab': tweets_list
     }
