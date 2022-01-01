@@ -14,7 +14,6 @@ class Names:
         'br': 'Bihar',
         'ch': 'Chandigarh',
         'ct': 'Chhattisgarh',
-        'dd': 'Daman and Diu',
         'dl': 'NCT of Delhi',
         'dn': 'Dadra and Nagar Haveli',
         'ga': 'Goa',

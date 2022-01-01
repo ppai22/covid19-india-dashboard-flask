@@ -1,6 +1,7 @@
 import numpy
 import pandas
 import requests
+import io
 
 from config import Names
 
@@ -11,9 +12,9 @@ class Service:
     """
 
     # API path from covid19india.org to fetch the data
-    URL = "https://api.covid19india.org/states_daily.json"
+    URL = "https://data.incovid19.org/csv/latest/state_wise_daily.csv"
     # State codes used in th API
-    STATES = ['an', 'ap', 'ar', 'as', 'br', 'ch', 'ct', 'dd', 'dl', 'dn',
+    STATES = ['an', 'ap', 'ar', 'as', 'br', 'ch', 'ct', 'dl', 'dn',
               'ga', 'gj', 'hp', 'hr', 'jh', 'jk', 'ka', 'kl', 'la', 'ld',
               'mh', 'ml', 'mn', 'mp', 'mz', 'nl', 'or', 'pb', 'py', 'rj',
               'sk', 'tg', 'tn', 'tr', 'tt', 'un', 'up', 'ut', 'wb']
@@ -29,8 +30,11 @@ class Service:
         Method to load data from the API
         :return: dict
         """
-        r = requests.get(self.URL)
-        data = r.json()
+        s = requests.get(self.URL).content
+        data = pandas.read_csv(io.StringIO(s.decode('utf-8')))
+        data = data.rename(columns=str.lower)
+        data = {'states_daily': data.to_dict('records')}
+
         return data
 
     def fetch_dates(self):
@@ -74,28 +78,31 @@ class Service:
             dates = list(dict.fromkeys(dates))
 
         for state in dataset.keys():
-            dataset_state = dataset[state]
-            for i in range(len(dates)):
-                active = int(dataset_state['Confirmed'][i]) - \
-                         (int(dataset_state['Recovered'][i]) +
-                          int(dataset_state['Deceased'][i]))
-                if i == 0:
-                    dataset_state['Total Recovered'].append(int(dataset_state['Recovered'][i]))
-                    dataset_state['Total Deceased'].append(int(dataset_state['Deceased'][i]))
-                    dataset_state['Total Active'].append(active)
-                else:
-                    dataset_state['Total Recovered'].append(
-                        int(dataset_state['Total Recovered'][-1]) +
-                        int(dataset_state['Recovered'][i])
-                    )
-                    dataset_state['Total Deceased'].append(
-                        int(dataset_state['Total Deceased'][-1]) +
-                        int(dataset_state['Deceased'][i])
-                    )
-                    dataset_state['Total Active'].append(
-                        int(dataset_state['Total Active'][-1]) +
-                        active
-                    )
+            try:
+                dataset_state = dataset[state]
+                for i in range(len(dates)):
+                    active = int(dataset_state['Confirmed'][i]) - \
+                             (int(dataset_state['Recovered'][i]) +
+                              int(dataset_state['Deceased'][i]))
+                    if i == 0:
+                        dataset_state['Total Recovered'].append(int(dataset_state['Recovered'][i]))
+                        dataset_state['Total Deceased'].append(int(dataset_state['Deceased'][i]))
+                        dataset_state['Total Active'].append(active)
+                    else:
+                        dataset_state['Total Recovered'].append(
+                            int(dataset_state['Total Recovered'][-1]) +
+                            int(dataset_state['Recovered'][i])
+                        )
+                        dataset_state['Total Deceased'].append(
+                            int(dataset_state['Total Deceased'][-1]) +
+                            int(dataset_state['Deceased'][i])
+                        )
+                        dataset_state['Total Active'].append(
+                            int(dataset_state['Total Active'][-1]) +
+                            active
+                        )
+            except:
+                pass
 
         for state in self.STATES:
             seven_day_avg[state] = [round(sum([int(val) for val in dataset[state]['Confirmed'][i-6:i+1]])/7)
@@ -114,16 +121,19 @@ class Service:
         states = [k for k, v in Names.state_names.items() if k != 'tt']
         return_dict = {}
         for state in states:
-            active = dataset[state]['Total Active'][-1]
-            recovered = dataset[state]['Total Recovered'][-1]
-            deceased = dataset[state]['Total Deceased'][-1]
-            confirmed = active + recovered + deceased
-            return_dict[Names.state_names[state]] = {
-                'total_confirmed': confirmed,
-                'total_active': active,
-                'total_recovered': recovered,
-                'total_deceased': deceased
-            }
+            try:
+                active = dataset[state]['Total Active'][-1]
+                recovered = dataset[state]['Total Recovered'][-1]
+                deceased = dataset[state]['Total Deceased'][-1]
+                confirmed = active + recovered + deceased
+                return_dict[Names.state_names[state]] = {
+                    'total_confirmed': confirmed,
+                    'total_active': active,
+                    'total_recovered': recovered,
+                    'total_deceased': deceased
+                }
+            except:
+                pass
         return return_dict
 
     def get_recovery_rate(self):
@@ -135,20 +145,23 @@ class Service:
         recovery_data = {}
         recovery_data_trend = {}
         for state in Names.state_names:
-            active = dataset[state]['Total Active'][-1]
-            recovered = dataset[state]['Total Recovered'][-1]
-            deceased = dataset[state]['Total Deceased'][-1]
-            active_total = numpy.array([int(i) for i in dataset[state]['Total Active']])
-            recovered_total = numpy.array([int(i) for i in dataset[state]['Total Recovered']])
-            deceased_total = numpy.array([int(i) for i in dataset[state]['Total Deceased']])
-            confirmed = active + recovered + deceased
-            confirmed_total = active_total + recovered_total + deceased_total
-            if int(confirmed) != 0:
-                recovery_data[state] = round(int(recovered) / int(confirmed) * 100, 2)
-            else:
-                recovery_data[state] = 100
-            recovery_data_trend[state] = numpy.nan_to_num(numpy.round(recovered_total / confirmed_total * 100, 2))
-            recovery_data_trend[state] = recovery_data_trend[state].tolist()
+            try:
+                active = dataset[state]['Total Active'][-1]
+                recovered = dataset[state]['Total Recovered'][-1]
+                deceased = dataset[state]['Total Deceased'][-1]
+                active_total = numpy.array([int(i) for i in dataset[state]['Total Active']])
+                recovered_total = numpy.array([int(i) for i in dataset[state]['Total Recovered']])
+                deceased_total = numpy.array([int(i) for i in dataset[state]['Total Deceased']])
+                confirmed = active + recovered + deceased
+                confirmed_total = active_total + recovered_total + deceased_total
+                if int(confirmed) != 0:
+                    recovery_data[state] = round(int(recovered) / int(confirmed) * 100, 2)
+                else:
+                    recovery_data[state] = 100
+                recovery_data_trend[state] = numpy.nan_to_num(numpy.round(recovered_total / confirmed_total * 100, 2))
+                recovery_data_trend[state] = recovery_data_trend[state].tolist()
+            except:
+                pass
         return recovery_data, recovery_data_trend
 
     def get_total_active_all_states(self):
@@ -214,15 +227,18 @@ class Service:
         active_cases, dates, seven_day_avg, seven_day_avg_deaths = self.tabulate()
         increase_count = {}
         for state, data in active_cases.items():
-            this_week = data['Total Active'][-7:]
-            this_week_increase = this_week[-1] - this_week[0]
-            # TODO: Figure out best estimate (Increase or percentage increase?)
-            if this_week_increase > 0:
-                if max(this_week) == this_week[-1]:
-                    increase_count[state] = this_week_increase
-                else:
-                    if max(this_week) - this_week[-1] <= 0.10 * this_week[0]:
+            try:
+                this_week = data['Total Active'][-7:]
+                this_week_increase = this_week[-1] - this_week[0]
+                # TODO: Figure out best estimate (Increase or percentage increase?)
+                if this_week_increase > 0:
+                    if max(this_week) == this_week[-1]:
                         increase_count[state] = this_week_increase
+                    else:
+                        if max(this_week) - this_week[-1] <= 0.10 * this_week[0]:
+                            increase_count[state] = this_week_increase
+            except:
+                pass
         return increase_count
 
     def get_recent_active_cases_decreasing_trend(self):
@@ -233,9 +249,12 @@ class Service:
         active_cases, dates, seven_day_avg, seven_day_avg_deaths = self.tabulate()
         decrease_count = {}
         for state, data in active_cases.items():
-            this_week = data['Total Active'][-7:]
-            this_week_decrease = this_week[-1] - this_week[0]
-            # TODO: Figure out best estimate (Decrease or percentage decrease?)
-            if this_week_decrease <= 0:
-                decrease_count[state] = this_week_decrease
+            try:
+                this_week = data['Total Active'][-7:]
+                this_week_decrease = this_week[-1] - this_week[0]
+                # TODO: Figure out best estimate (Decrease or percentage decrease?)
+                if this_week_decrease <= 0:
+                    decrease_count[state] = this_week_decrease
+            except:
+                pass
         return decrease_count
